@@ -80,12 +80,12 @@ class Chain {
         const isValid = verifier.verify(senderPublicKey, signature);
 
         if (isValid) {
+            if(this.getBalanceOfAddress(transaction.payer) >= transaction.amount || this.lastBlock.prevHash == "") {
 
-
-
-
-            const newBlock = new Block(this.lastBlock.hash, transaction);
-            this.chain.push(newBlock);
+                const newBlock = new Block(this.lastBlock.hash, transaction);
+                this.chain.push(newBlock);
+            }
+            else console.log('insufficient funds! 😱');
         }
     }
 
@@ -140,11 +140,11 @@ const alice = new Wallet();
 
 
 satoshi.sendMoney(50, bob.publicKey);
-bob.sendMoney(23, alice.publicKey);
+bob.sendMoney(55, alice.publicKey);
 alice.sendMoney(5, bob.publicKey);
 
 console.log(Chain.instance);
 
-console.log(Chain.instance.getBalanceOfAddress(alice.publicKey));
+//console.log(Chain.instance.getBalanceOfAddress(alice.publicKey));
 
-console.log('test');
+
