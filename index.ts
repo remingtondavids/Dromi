@@ -46,7 +46,6 @@ class Chain {
 
     constructor() {
         this.chain = [new Block("", new Transaction(100, 'genesis', 'satoshi'))];
-
     }
 
     get lastBlock() {
@@ -70,7 +69,6 @@ class Chain {
 
             solution += 1;
         }
-
     }
 
     addBlock(transaction: Transaction, senderPublicKey: string, signature: Buffer) {
@@ -79,29 +77,11 @@ class Chain {
 
         const isValid = verifier.verify(senderPublicKey, signature);
 
-        if (isValid) {
-
-
-
+        if (isValid) {          
 
             const newBlock = new Block(this.lastBlock.hash, transaction);
             this.chain.push(newBlock);
         }
-    }
-
-    getBalanceOfAddress(senderPublicKey: string) {
-        let balance = 0;
-
-        for(const Block of this.chain){
-            if (Block.transaction.payer == senderPublicKey) {
-                balance -= Block.transaction.amount;
-            }
-            if (Block.transaction.payee == senderPublicKey) {
-                balance += Block.transaction.amount;
-            }
-        }
-
-        return balance;
     }
 }
 
@@ -131,7 +111,6 @@ class Wallet {
     }
 }
 
-
 // Example Usage
 
 const satoshi = new Wallet();
@@ -144,7 +123,3 @@ bob.sendMoney(23, alice.publicKey);
 alice.sendMoney(5, bob.publicKey);
 
 console.log(Chain.instance);
-
-console.log(Chain.instance.getBalanceOfAddress(alice.publicKey));
-
-console.log('test');
