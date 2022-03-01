@@ -83,6 +83,7 @@ class Chain {
             if(this.getBalanceOfAddress(transaction.payer) >= transaction.amount || this.lastBlock.prevHash == "") {
 
                 const newBlock = new Block(this.lastBlock.hash, transaction);
+                this.mine(newBlock.nonce);
                 this.chain.push(newBlock);
             }
             else console.log('insufficient funds! 😱');
@@ -140,7 +141,7 @@ const alice = new Wallet();
 
 
 satoshi.sendMoney(50, bob.publicKey);
-bob.sendMoney(55, alice.publicKey);
+bob.sendMoney(23, alice.publicKey);
 alice.sendMoney(5, bob.publicKey);
 
 console.log(Chain.instance);
