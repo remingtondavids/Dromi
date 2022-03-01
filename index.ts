@@ -7,6 +7,7 @@ https://www.youtube.com/watch?v=qF7dkrce-mQ
 */
 
 import * as crypto from 'crypto';
+import { threadId } from 'worker_threads';
 
 class Transaction {
     constructor(
@@ -79,12 +80,29 @@ class Chain {
         const isValid = verifier.verify(senderPublicKey, signature);
 
         if (isValid) {
+
+
+
+
             const newBlock = new Block(this.lastBlock.hash, transaction);
             this.chain.push(newBlock);
         }
-
     }
 
+    getBalanceOfAddress(senderPublicKey: string) {
+        let balance = 0;
+
+        for(const Block of this.chain){
+            if (Block.transaction.payer == senderPublicKey) {
+                balance -= Block.transaction.amount;
+            }
+            if (Block.transaction.payee == senderPublicKey) {
+                balance += Block.transaction.amount;
+            }
+        }
+
+        return balance;
+    }
 }
 
 class Wallet {
@@ -111,7 +129,6 @@ class Wallet {
         const signature = sign.sign(this.privateKey);
         Chain.instance.addBlock(transaction, this.publicKey, signature);
     }
-
 }
 
 
@@ -127,3 +144,7 @@ bob.sendMoney(23, alice.publicKey);
 alice.sendMoney(5, bob.publicKey);
 
 console.log(Chain.instance);
+
+console.log(Chain.instance.getBalanceOfAddress(alice.publicKey));
+
+console.log('test');
